@@ -1,19 +1,21 @@
 import { createStore, declareAction, declareAtom, map } from '@reatom/core'
-import React, {useState} from 'react'
+import { useAction } from '@reatom/react'
+import React, {useRef, useState} from 'react'
 import { StyleSheet, View, TextInput, Button, Alert} from 'react-native'
-import { dispatch, store } from '../../App'
 import { ADD_TODO_ELEM } from '../Model/actions'
-import { toDoElemsAtom } from '../Model/atoms'
 
 
 export const AddToDoElem = () => {
 
     const [value, setValue] = useState<string>('')
 
+    const inputRef = useRef<TextInput>(null)
+
+    const addElem = useAction(ADD_TODO_ELEM)
 
     const pressHandler = () => {
         if (value.trim()) {                                   //проверка на пустую строку                          
-            dispatch(ADD_TODO_ELEM(value))              //props.addToDo(value)
+            addElem(value)
             setValue('')
         } else {
             Alert.alert('заполните поле ввода')
@@ -23,6 +25,7 @@ export const AddToDoElem = () => {
     return (
         <View style={styles.block}>
             <TextInput 
+                ref={inputRef}
                 style={styles.input}
                 onChangeText={setValue}
                 value={value}

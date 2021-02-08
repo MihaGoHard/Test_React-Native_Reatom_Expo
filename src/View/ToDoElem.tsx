@@ -1,6 +1,6 @@
+import { useAction } from '@reatom/react'
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity} from 'react-native'   //touchableOpacity мониторит нажатие на компонент внутри него, меняет прозрачность, при нажатии  
-import { dispatch } from '../../App'
 import { REMOVE_TODO_ELEM } from '../Model/actions'
 
 interface toDoProps {
@@ -11,12 +11,14 @@ interface toDoProps {
 }
 
 
-export const ToDoElem = (props: toDoProps) => {
+const ToDoElem = ({toDo}: toDoProps) => {
+
+    const removeElem = useAction(REMOVE_TODO_ELEM)
 
     const onLongPressHandler = () => {
-        dispatch(REMOVE_TODO_ELEM(props.toDo.id))
+        removeElem(toDo.id)
     }
-  
+
     return (
         <TouchableOpacity 
             activeOpacity={0.3}
@@ -24,12 +26,13 @@ export const ToDoElem = (props: toDoProps) => {
             onLongPress={onLongPressHandler}
         >            
             <View style={styles.toDo}>
-                <Text>{props.toDo.title}</Text>
+                <Text>{toDo.title}</Text>
             </View>
         </TouchableOpacity>        
     )    
 }
 
+export default ToDoElem
 
 const styles = StyleSheet.create({   //вопрос по скроллу
     toDo: {
